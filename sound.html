@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script src="http://chamu.org/tonejs/Tone.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>
+            var synth = new Tone.Synth().toMaster();
+            function playSound(){
+                synth.triggerAttackRelease('C4', '4n');
+            }
+
+
+            
+
+            function setPlay(time, note){
+                synth.triggerAttackRelease(note, '8n', time);
+            }            
+
+            function playMusic(melodyList){
+                var synth = new Tone.Synth().toMaster();
+                var melody = new Tone.Sequence(setPlay, melodyList).start();
+                Tone.Transport.bpm.value = 168;
+                melody.loop = false;
+                Tone.Transport.start();
+            }
+        </script>
+    </head>
+    <body>
+        <input type="button" value="play" onclick="playSound();"/>
+        
+        <input type="button" value="music" onclick="playMusic([
+        'C4', 'D4', 'E4', 'F4', 'E4', 'D4', 'C4'
+        ]);"/>
+
+        <br>
+        <p>入力:<span id="span1"></span></p>
+        <form name="form1">
+            <textarea name="sound" rows="10" cols="40">C4</textarea>
+        </form>
+        <input type="button" value="再生" onclick="clickBtn1()"/>
+        <input type="button" value="クリア" onclick="ClearText()"/>
+
+        <br>
+        <input type="button" value="変換" onclick="haisai()"/>
+
+
+        <script>
+        function clickBtn1(){
+            const str = document.form1.sound.value;
+            document.getElementById("span1").textContent = str;
+            melodyList = str.split(' ');
+            playMusic(melodyList);
+        }
+        function ClearText(){
+            document.getElementById("span1").textContent = "";
+        }
+        
+        function haisai(){
+            let str = document.form1.sound.value;
+            //document.getElementById("span1").textContent = str;
+            str = str.replace(/D/g, 'E');
+            str = str.replace(/A/g, 'B');
+
+            document.getElementById("span1").textContent = str;
+
+            melodyList = str.split(' ');
+            
+            /*
+            for(var i = 0; i < melodyList.length; i++){
+                /*
+                if(melodyList[i].char == 'D'){
+                    melodyList[i][0] = 'C';
+                }else if(melodyList[i][0] == 'A'){
+                    melodyList[i][0] = 'G';
+                }
+                
+                
+                melodyList[i] = melodyList.replace('D', 'C');
+                melodyList[i] = melodyList.replace('A', 'G');
+                
+            }
+            */
+
+            playMusic(melodyList);
+        }
+        </script>
+
+    </body>
+</html>
